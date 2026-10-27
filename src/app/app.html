@@ -1,0 +1,501 @@
+<div class="portfolio">
+
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero section" id="home" appReveal>
+
+      <div class="hero-bg" aria-hidden="true">
+        <canvas appNetworkBg></canvas>
+      </div>
+
+      <div class="hero-photo">
+        <img src="assets/images/ken.png" alt="{{ name }}" />
+      </div>
+
+      <div class="hero-copy">
+        <h1>Hello, I'm <span class="accent">{{ name }}.</span></h1>
+
+        <h2>
+          Software
+          <span class="accent">Developer</span>
+        </h2>
+
+        <div class="hero-actions">
+          <button mat-flat-button color="primary" (click)="goToProjects()">
+            View Projects
+          </button>
+
+          <button mat-flat-button (click)="goToContact()">
+            Contact Me
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    
+
+    <section class="section about-section" id="about" appReveal>
+      
+          <h1 class="about-title">
+            About <span class="accent">Me</span>
+          </h1>
+          <br>
+      <div class="about-content">
+
+        <!-- Left Column: Trait cards -->
+          <div class="about-visuals">
+            <div class="trait-stack"
+                role="button"
+                tabindex="0"
+                aria-label="Show next strength"
+                (click)="nextStrength()"
+                (keydown.enter)="nextStrength()"
+                (keydown.space)="nextStrength(); $event.preventDefault()">
+
+              <div class="trait-card"
+                  *ngFor="let item of strengths; let i = index"
+                  [ngStyle]="getStrengthStyle(i)"
+                  [class.front]="i === activeStrength">
+
+                <div class="trait-top">
+                  <span class="trait-label">TRAIT</span>
+                  <mat-icon>{{ item.icon }}</mat-icon>
+                </div>
+
+                <div>
+                  <h3>{{ item.title }}</h3>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+
+
+        <!-- Right Column: About Me -->
+        <div class="about-description">
+          <p class="muted about-text">
+            I’m a Software Developer with 3 years of experience in web
+            application maintenance, debugging, bug fixing, and feature
+            enhancements. I’ve also collaborated with banking clients,
+            developing data automation solutions using SSIS and ETL
+            processes to streamline workflows and improve operational efficiency.
+          </p>
+          <br>
+          <p class="muted about-text">
+            I’m expanding my expertise in website development, CRM systems,
+            and workflow automation to help businesses optimize processes,
+            reduce repetitive tasks, and create efficient digital solutions.
+          </p>
+
+          <div class="hero-actions">
+            <button mat-flat-button color="primary"
+                    (click)="downloadResume()">
+              Download Resume
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- Experience -->
+    <section class="section" id="experience" appReveal>
+
+      <div class="section-heading">
+        <h2>Professional <span class="accent">Experience</span></h2>
+      </div>
+
+      <mat-vertical-stepper class="experience-stepper"
+                            [linear]="false">
+        <mat-step *ngFor="let exp of experiences">
+          <ng-template matStepLabel>
+            <span class="step-title">{{ exp.title }}</span>
+            <span class="step-period">{{ exp.period }}</span>
+          </ng-template>
+
+          <article class="experience-card">
+            <p class="card-kicker">{{ exp.company }}</p>
+            <h3>{{ exp.title }}</h3>
+
+            <h4>Key Contributions</h4>
+            <ul class="contribution-list">
+              <li *ngFor="let item of exp.responsibilities">
+                <span class="check">✓</span>
+                {{ item }}
+              </li>
+            </ul>
+
+            <div class="tag-list">
+              <span class="tag" *ngFor="let tech of exp.technologies">
+                {{ tech }}
+              </span>
+            </div>
+          </article>
+        </mat-step>
+      </mat-vertical-stepper>
+    </section>
+
+    <!-- Projects -->
+    <section class="section projects-section" id="projects" appReveal>
+
+      <div class="section-heading">
+        <h2>Featured <span class="accent">Projects</span></h2>
+      </div>
+
+      <!-- Placeholder preview (ginagamit kapag wala pang screenshot) -->
+      <ng-template #mockPreview let-project>
+        <div class="project-preview">
+          <span class="preview-number">{{ project.number }}</span>
+          <div class="preview-window">
+            <div class="preview-sidebar">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="preview-content">
+              <span class="preview-line wide"></span>
+              <span class="preview-line"></span>
+              <div class="preview-boxes">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="preview-line wide"></span>
+              <span class="preview-line medium"></span>
+              <span class="preview-line wide"></span>
+            </div>
+          </div>
+          <span class="project-type">{{ project.type }}</span>
+        </div>
+      </ng-template>
+
+      <!-- Coverflow carousel -->
+      <div class="coverflow"
+           tabindex="0"
+           (keydown.arrowleft)="prevProject()"
+           (keydown.arrowright)="nextProject()"
+           (touchstart)="onTouchStart($event)"
+           (touchend)="onTouchEnd($event)">
+        <div class="project-slide"
+             *ngFor="let project of projects; let i = index"
+             [ngStyle]="getSlideStyle(i)"
+             [class.active]="i === activeProject"
+             (click)="onSlideClick(i)">
+
+          <img *ngIf="coverOf(project)"
+               [src]="coverOf(project)"
+               [alt]="project.title" />
+
+          <ng-container *ngIf="!coverOf(project)">
+            <ng-container
+              *ngTemplateOutlet="mockPreview; context: { $implicit: project }">
+            </ng-container>
+          </ng-container>
+
+          <span class="slide-hint">⤢ View gallery</span>
+        </div>
+      </div>
+
+      <!-- Text of the active project (below the carousel) -->
+      <div class="project-info">
+        <ng-container *ngFor="let project of projects; let i = index">
+          <div class="project-info-inner" *ngIf="i === activeProject">
+            <div class="proj-text">
+
+              <h3>{{ project.title }}</h3>
+              <p class="muted">{{ project.description }}</p>
+
+            </div>
+
+            <div class="tag-list">
+              <span class="tag" *ngFor="let tech of project.technologies">
+                <i *ngIf="getTechIcon(tech)" [ngClass]="getTechIcon(tech)"></i>
+                {{ tech }}
+              </span>
+            </div>
+
+            
+            <div class="project-actions">
+              <button class="gallery-btn" type="button" (click)="openGallery()">
+                View Gallery
+              </button>
+
+              <a *ngIf="project.github"
+                 class="project-link"
+                 [href]="project.github"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                View Source ↗
+              </a>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="carousel-controls" *ngIf="projects.length > 1">
+        <button class="carousel-btn" type="button"
+                (click)="prevProject()"
+                aria-label="Previous project">‹</button>
+
+        <div class="carousel-dots">
+          <button *ngFor="let p of projects; let i = index"
+                  class="dot"
+                  type="button"
+                  [class.active]="i === activeProject"
+                  (click)="selectProject(i)"
+                  [attr.aria-label]="'Go to project ' + (i + 1)"></button>
+        </div>
+
+        <button class="carousel-btn" type="button"
+                (click)="nextProject()"
+                aria-label="Next project">›</button>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section" id="skills" appReveal>
+
+      <div class="section-heading">
+        <h2>Technical<span class="accent"> Skills</span></h2>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card" *ngFor="let group of skillGroups">
+          <h3>{{ group.title }}</h3>
+
+          <div class="skill-items">
+            <span class="skill-item"
+                  *ngFor="let skill of group.skills"
+                  [title]="skill">
+              
+              <!-- Kunin ang icon string mula sa function -->
+              <ng-container *ngIf="getSkillIcon(skill) as iconPath">
+                
+                
+                <!-- Kung Image File (GHL) -->
+                <img *ngIf="isImageIcon(iconPath); else fontIcon" 
+                    [src]="iconPath" 
+                    [alt]="skill" 
+                    class="skill-custom-icon">
+
+                <!-- Kung Devicon Font Class -->
+                <ng-template #fontIcon>
+                  <i [ngClass]="iconPath"></i>
+                </ng-template>
+
+              </ng-container>
+
+              <span>{{ skill }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section contact-section" id="contact" appReveal>
+
+      <div class="section-heading">
+        <h2>Get In <span class="accent">Touch</span></h2>
+        <p class="muted">
+          I'm open to discussing software development opportunities
+          and interesting projects.
+        </p>
+      </div>
+
+      <form class="contact-form" #contactForm="ngForm"
+            (ngSubmit)="sendMessage(contactForm)" novalidate>
+
+        <label class="field"
+              [class.invalid]="nameCtrl.invalid && (nameCtrl.touched || submitted)">
+          <mat-icon>person</mat-icon>
+          <input type="text" name="name" placeholder="Your Name"
+                [(ngModel)]="contact.name" #nameCtrl="ngModel" required />
+        </label>
+
+        <label class="field"
+              [class.invalid]="emailCtrl.invalid && (emailCtrl.touched || submitted)">
+          <mat-icon>mail</mat-icon>
+          <input type="email" name="email" placeholder="Your Email"
+                [(ngModel)]="contact.email" #emailCtrl="ngModel" required email />
+        </label>
+
+        <label class="field area"
+              [class.invalid]="messageCtrl.invalid && (messageCtrl.touched || submitted)">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <textarea name="message" placeholder="Your Message"
+                    [(ngModel)]="contact.message" #messageCtrl="ngModel" required></textarea>
+        </label>
+
+        <button mat-flat-button type="submit" class="send-btn" [disabled]="sending">
+          <mat-icon>send</mat-icon>
+          {{ sending ? 'Sending...' : 'Send Message' }}
+        </button>
+
+        <p class="form-note error" *ngIf="submitted && contactForm.invalid">
+          Please fill in your name, a valid email, and a message.
+        </p>
+        <p class="form-note error" *ngIf="sendError">
+          Something went wrong. Please try again later.
+        </p>
+        <p class="form-note success" *ngIf="sent">
+          Thanks! Your message has been sent.
+        </p>
+      </form>
+
+      <div class="connect">
+        <p class="connect-label">Connect With Me</p>
+
+        <div class="social-grid">
+          <a class="social-link"
+            *ngFor="let s of socials"
+            [href]="s.url"
+            target="_blank"
+            rel="noopener noreferrer">
+            <i [ngClass]="s.icon"></i>
+            <span>
+              <strong>{{ s.name }}</strong>
+              <small>{{ s.handle }}</small>
+            </span>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- footer -->
+    <footer class="footer">
+    <div class="footer-inner">
+
+      <div class="footer-top">
+        <a class="brand" href="#home">
+          <span class="brand-mark">RN</span>
+          <span>
+            <strong>{{ name }}</strong>
+            <small>{{ role }}</small>
+          </span>
+        </a>
+
+         <p>{{ name }} © {{ year }}</p>
+
+        <a class="to-top" href="#home" aria-label="Back to top">
+          <mat-icon>arrow_upward</mat-icon>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+  <!-- end of footer -->
+
+    <!-- Project gallery popup -->
+  <div class="gallery"
+       *ngIf="galleryOpen && selectedProject as project"
+       role="dialog"
+       aria-modal="true"
+       [attr.aria-label]="project.title + ' gallery'"
+       (click)="closeGallery()">
+
+    <div class="gallery-dialog" (click)="$event.stopPropagation()">
+      <div class="gallery-header">
+        <h3>{{ project.title }}</h3>
+
+        <div class="gallery-header-right">
+          <button class="gallery-fit" type="button"
+                  *ngIf="project.media[galleryIndex]?.type === 'image'"
+                  (click)="toggleFit()">
+            {{ fitMode ? 'Full size ↕' : 'Fit to screen' }}
+          </button>
+
+          <span class="gallery-count" *ngIf="project.media.length">
+            {{ galleryIndex + 1 }} / {{ project.media.length }}
+          </span>
+
+          <button class="gallery-close" type="button"
+                  (click)="closeGallery()"
+                  aria-label="Close gallery">✕</button>
+        </div>
+      </div>
+
+      <div class="gallery-stage">
+        <ng-container *ngIf="project.media.length; else noMedia">
+          <button class="gallery-nav prev" type="button"
+                  *ngIf="project.media.length > 1"
+                  (click)="prevMedia()"
+                  aria-label="Previous">‹</button>
+
+          <ng-container *ngFor="let item of project.media; let i = index">
+            <div class="gallery-scroll"
+                 *ngIf="i === galleryIndex"
+                 [class.fit]="fitMode"
+                 tabindex="0"
+                 (scroll)="onGalleryScroll($event)">
+
+              <img *ngIf="item.type === 'image'"
+                   [src]="item.src"
+                   [alt]="item.caption || project.title"
+                   (load)="onMediaLoad()" />
+
+              <video *ngIf="item.type === 'video'"
+                     [src]="item.src"
+                     [poster]="item.poster || ''"
+                     controls
+                     playsinline
+                     preload="metadata"></video>
+            </div>
+          </ng-container>
+
+          <button class="gallery-nav next" type="button"
+                  *ngIf="project.media.length > 1"
+                  (click)="nextMedia()"
+                  aria-label="Next">›</button>
+
+          <div class="scroll-hint" *ngIf="scrollHint">
+            Scroll ↓ to see the full page
+          </div>
+        </ng-container>
+
+        <ng-template #noMedia>
+          <ng-container
+            *ngTemplateOutlet="mockPreview; context: { $implicit: project }">
+          </ng-container>
+          <p class="gallery-empty">Screenshots and videos coming soon.</p>
+        </ng-template>
+      </div>
+
+      <p class="gallery-caption" *ngIf="project.media[galleryIndex]?.caption">
+        {{ project.media[galleryIndex].caption }}
+      </p>
+
+      <div class="gallery-thumbs" *ngIf="project.media.length > 1">
+        <button *ngFor="let item of project.media; let i = index"
+                class="thumb"
+                type="button"
+                [class.active]="i === galleryIndex"
+                (click)="selectMedia(i)"
+                [attr.aria-label]="'Show item ' + (i + 1)">
+          <img *ngIf="item.type === 'image'" [src]="item.src" alt="" />
+          <img *ngIf="item.type === 'video' && item.poster"
+               [src]="item.poster" alt="" />
+          <span class="thumb-play" *ngIf="item.type === 'video'">▶</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

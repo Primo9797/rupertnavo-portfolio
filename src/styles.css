@@ -1,0 +1,36 @@
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import url("https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css");
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #111b2e;
+}
+
+body {
+  background: #111b2e;
+  margin: 0;
+  min-width: 320px;
+  font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+.mat-mdc-button-base,
+.mat-mdc-button-base .mdc-button__label,
+.contact-button {
+  font-family: "JetBrains Mono" !important;
+}
+
+::selection {
+  color: #ffffff;
+  background: #2563eb;
+}
