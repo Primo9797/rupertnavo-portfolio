@@ -594,6 +594,30 @@ export class AppComponent implements OnDestroy {
       }
     }
   // ---- End Contact ----
+
+  menuOpen = false;
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
+  }
+
+  // isara kapag pumindot sa labas ng menu
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!(event.target as HTMLElement).closest('.site-nav')) {
+      this.menuOpen = false;
+    }
+  }
+
+  // isara kapag pinindot ang Esc
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.menuOpen = false;
+  }
 }
 
 

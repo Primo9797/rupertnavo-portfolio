@@ -1,13 +1,27 @@
 <div class="portfolio">
 
   <!-- Navigation -->
-  <nav class="site-nav">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#experience">Experience</a>
-    <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
-    <a href="#contact">Contact</a>
+  <nav class="site-nav" [class.open]="menuOpen">
+
+    <button class="nav-toggle"
+            type="button"
+            (click)="toggleMenu()"
+            [attr.aria-expanded]="menuOpen"
+            aria-controls="nav-links"
+            aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#home" (click)="closeMenu()">Home</a>
+      <a href="#about" (click)="closeMenu()">About</a>
+      <a href="#experience" (click)="closeMenu()">Experience</a>
+      <a href="#projects" (click)="closeMenu()">Projects</a>
+      <a href="#skills" (click)="closeMenu()">Skills</a>
+      <a href="#contact" (click)="closeMenu()">Contact</a>
+    </div>
   </nav>
 
   <main>
